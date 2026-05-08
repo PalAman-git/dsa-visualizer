@@ -1,73 +1,182 @@
-# React + TypeScript + Vite
+# 🧠 Algorithm Visualizer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive platform to visualize **Data Structures & Algorithms** step-by-step using animations and state-driven execution.
 
-Currently, two official plugins are available:
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🎯 What This Project Does
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Most algorithm platforms explain solutions **statically**.
 
-## Expanding the ESLint configuration
+This project converts algorithms into **visual execution states** so users can watch how algorithms *think* internally — not just read about them.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Instead of staring at code, users can watch:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- 📍 Pointers move across arrays
+- 🪟 Windows expand and shrink
+- 🔍 Binary search ranges narrow
+- 🗂️ HashSets update in real time
+- ✅ Answers evolve step-by-step
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+> The goal is to build **algorithm intuition** for programmers, students, and interview prep.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## ✨ Current Visualizations
+
+### 🪟 Sliding Window
+- Fixed-size and variable-size window visualization
+- Pointer movement (`i`, `j`)
+- Window expansion & shrinking
+- Running sum updates
+
+### 🔡 Longest Substring Without Repeating Characters
+- Dynamic sliding window
+- Duplicate detection
+- HashSet visualization
+- Maximum length tracking
+
+### 🔍 Binary Search
+- Left / Right / Mid pointer visualization
+- Search range shrinking animation
+- Target detection highlight
+
+---
+
+## ⚙️ Core Idea
+
+Algorithms are transformed into discrete execution states that drive the UI:
+```ts
+Algorithm → Execution States → UI Rendering → Animated Visualization
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Each algorithm generates snapshots at every decision point:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```ts
+states.push({
+  left,
+  right,
+  mid,
+  found,
+});
 ```
+
+The UI renders these states sequentially to create an **interactive, step-by-step learning experience**.
+
+---
+
+## 🏗️ Architecture
+
+```text
+src/
+|
+├── algorithms/        # Generates execution states
+│
+├── components/        # Reusable visual components
+│
+├── pages/             # Algorithm visualizer pages
+│
+├── config/            # Algorithm registry & configuration
+│
+└── App.tsx
+```
+
+
+---
+
+## 🚀 Running Locally
+
+```bash
+# Clone the repository
+git clone <repo-url>
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+---
+
+## ✅ Current Features
+
+- ♻️ Reusable visualization engine
+- 🧩 Generic array visualizer
+- 🔀 Dynamic algorithm selector
+- 🎞️ Animated transitions via Framer Motion
+- 🧱 Modular architecture for adding new algorithms
+- ⚙️ Config-driven rendering system
+
+---
+
+## 🗺️ Planned Features
+
+- [ ] Play / Pause / Step controls
+- [ ] Speed controls
+- [ ] Complexity visualization (Time & Space)
+- [ ] Code line highlighting (synchronized with steps)
+- [ ] Tree visualizations
+- [ ] Graph algorithms (BFS, DFS, Dijkstra)
+- [ ] Dynamic Programming table animations
+- [ ] Recursion stack visualization
+- [ ] Sorting algorithm animations
+- [ ] Custom user input
+- [ ] Algorithm categories & search
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| React | UI framework |
+| TypeScript | Type safety |
+| Tailwind CSS | Styling |
+| Framer Motion | Animations |
+| shadcn/ui | UI components |
+| Vite | Build tool |
+
+---
+
+## 💡 Why I Built This
+
+Understanding *why* an algorithm works is harder than memorizing *how* it works.
+
+This platform focuses on:
+
+- 🔎 **Visual intuition** — see decisions as they happen
+- 🧭 **Pointer mechanics** — watch indices move in real time
+- 🔄 **State evolution** — observe how data changes each step
+- 🧠 **Pattern recognition** — build mental models, not just memory
+
+---
+
+## 🌐 Future Vision
+
+The long-term goal is a **complete interactive DSA learning platform** with:
+
+- Visual execution for all major algorithm patterns
+- Pattern-based learning paths
+- Interview preparation mode
+- Algorithm playgrounds with custom inputs
+- Educational storytelling overlays
+
+---
+
+## 🤝 Contributing
+
+Ideas, feedback, and contributions are welcome!
+
+Feel free to open an issue or submit a pull request.
+
+---
+
+## 📄 License
+
+MIT License — free to use, modify, and distribute.
