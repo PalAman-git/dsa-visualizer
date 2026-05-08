@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
+import { ArrowUp, ArrowDown } from "lucide-react";
 
 type Pointer = {
     index: number;
     label: string;
     position?: "top" | "bottom";
+    color?: string;
 };
 
 type Props<T> = {
@@ -41,37 +43,106 @@ const ArrayVisualizer = <T,>({
                             w-16 h-16
                             flex items-center justify-center
                             text-xl
-                            ${
-                                isHighlighted
-                                    ? "bg-orange-200"
-                                    : "bg-white"
+                            ${isHighlighted
+                                ? "bg-orange-200"
+                                : "bg-white"
                             }
                         `}
                     >
 
                         {String(item)}
 
-                        {pointers.map((pointer, pIdx) => (
+                        {pointers.map((pointer, pIdx) => {
 
-                            pointer.index === idx && (
+                            if (pointer.index !== idx) {
+                                return null;
+                            }
+
+                            const sameIndexPointers =
+                                pointers.filter(
+                                    p => p.index === idx
+                                );
+
+                            const currentPointerIndex =
+                                sameIndexPointers.findIndex(
+                                    p => p.label === pointer.label
+                                );
+
+                            let offset = 0;
+
+                            if (sameIndexPointers.length === 2) {
+
+                                offset =
+                                    currentPointerIndex === 0
+                                        ? -10
+                                        : 10;
+                            }
+
+                            else if (sameIndexPointers.length === 3) {
+
+                                const positions = [-18, 0, 18];
+
+                                offset =
+                                    positions[currentPointerIndex];
+                            }
+
+                            return (
 
                                 <div
                                     key={pIdx}
+
                                     className={`
-                                        absolute text-sm
-                                        ${
-                                            pointer.position === "bottom"
-                                                ? "-bottom-6"
-                                                : "-top-6"
+                absolute
+                left-1/2
+                flex flex-col items-center
+                text-sm
+                font-semibold
+                ${pointer.color?? "text-black"}
+                ${pointer.position === "bottom"
+                                            ? "-bottom-8"
+                                            : "-top-8"
                                         }
-                                    `}
+            `}
+
+                                    style={{
+                                        transform:
+                                            `translateX(calc(-50% + ${offset}px))`
+                                    }}
                                 >
-                                    {pointer.label}
+
+                                    {
+                                        pointer.position === "bottom"
+                                            ? (
+                                                <>
+                                                    <ArrowUp
+                                                        size={14}
+                                                        strokeWidth={2.5}
+                                                    />
+
+                                                    <span>
+                                                        {pointer.label}
+                                                    </span>
+                                                </>
+                                            )
+                                            : (
+                                                <>
+                                                    <span>
+                                                        {pointer.label}
+                                                    </span>
+
+                                                    <ArrowDown
+                                                        size={14}
+                                                        strokeWidth={2.5}
+                                                    />
+                                                </>
+                                            )
+                                    }
+
                                 </div>
 
-                            )
+                            );
 
-                        ))}
+                        })}
 
                     </motion.div>
 

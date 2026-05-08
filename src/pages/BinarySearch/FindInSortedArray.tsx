@@ -1,11 +1,11 @@
 import { generateFindInSortedArrayStates, type State } from "@/algorithms/BinarySearch/findInSortedArray";
 import ArrayVisualizer from "@/components/dataStructure/ArrayVisualizer";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const FindInSortedArray = () => {
     const nums = [2, 5, 9, 11, 20, 21, 25, 27, 55, 70];
-    const k = 70;
+    const k = 11;
 
     const states: State[] = generateFindInSortedArrayStates(nums, k);
 
@@ -24,17 +24,20 @@ const FindInSortedArray = () => {
                         {
                             index: current.i,
                             label: "i",
-                            position: 'bottom'
+                            position: 'bottom',
+                            color:"text-blue-500"
                         },
                         {
                             index: current.mid,
                             label: "mid",
-                            position: 'top'
+                            position: 'top',
+                            color:"text-green-500"
                         },
                         {
                             index: current.j,
                             label: 'j',
-                            position: 'bottom'
+                            position: 'bottom',
+                            color:"text-red-500"
                         }
                     ]}
                 />
