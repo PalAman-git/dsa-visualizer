@@ -1,11 +1,13 @@
 import { generateFindInSortedArrayStates, type State } from "@/algorithms/BinarySearch/findInSortedArray";
+import ActionPanel from "@/components/controls/ActionPanel";
 import ArrayVisualizer from "@/components/dataStructure/ArrayVisualizer";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 const FindInSortedArray = () => {
     const nums = [2, 5, 9, 11, 20, 21, 23, 25, 27, 33, 37, 39, 40, 48, 55, 70, 81, 82, 89, 90,];
-    const k = 38;
+    const k = 40;
+
+    const question = "Find a number in Sorted Array";
 
     const states: State[] = generateFindInSortedArrayStates(nums, k);
 
@@ -15,15 +17,16 @@ const FindInSortedArray = () => {
 
     return (
         <div className="p-10">
-            <div className="flex justify-center items-center gap-4">
+            <div className="flex justify-center items-center gap-4 mb-10">
 
                 <ArrayVisualizer
                     items={nums}
                     highlightedIndices={[current.mid]}
+                    foundIndex={current.found ? current.mid : -1}
                     pointers={[
                         {
                             index: current.i,
-                            label: "left",
+                            label: "i",
                             position: 'bottom',
                             color: "text-blue-500"
                         },
@@ -35,42 +38,16 @@ const FindInSortedArray = () => {
                         },
                         {
                             index: current.j,
-                            label: 'right',
+                            label: 'j',
                             position: 'bottom',
                             color: "text-red-500"
                         }
                     ]}
                 />
-                <span className="h-16 text-xl w-16 flex justify-center items-center border-green-200 border">{k}</span> :Target
+                <span className="h-12 text-xl w-12 flex justify-center items-center border-green-200 border">{k}</span> :Target
             </div>
 
-            <div className="mt-10">
-                <span className="text-orange-400">{current.found ? "Mid == Target" : "Mid != Target"}</span>
-            </div>
-
-            <div className="flex justify-center gap-4 mt-10">
-
-                <Button onClick={() => {
-                    setStep((prev) => {
-                        if (prev > 0) {
-                            return prev - 1;
-                        }
-                        return prev;
-                    })
-                }}>
-                    Prev
-                </Button>
-                <Button onClick={() => {
-                    setStep((prev) => {
-                        if (prev < states.length - 1) {
-                            return prev + 1;
-                        }
-                        return prev;
-                    })
-                }}>
-                    Next
-                </Button>
-            </div>
+                <ActionPanel step={step} statesLength={states.length} setStep={setStep} />
         </div>
     )
 }

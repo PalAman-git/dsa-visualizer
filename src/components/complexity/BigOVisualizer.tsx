@@ -27,7 +27,7 @@ const fns = [
   {
     id: "n", label: "O(n)", color: "#d97706", dash: "",
     name: "Linear time",
-    algos: ["Linear search", "Array traversal", "Finding min / max", "Counting elements", "Two-pointer technique"],
+    algos: ["Linear search", "Array traversal", "Finding min / max", "Counting elements", "Two-pointer technique","Sliding Window"],
     fn: (n:number) => n,
   },
   {

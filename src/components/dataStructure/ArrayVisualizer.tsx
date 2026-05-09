@@ -12,6 +12,7 @@ type Props<T> = {
     items: T[];
 
     highlightedIndices?: number[];
+    foundIndex?: number;
 
     pointers?: Pointer[];
 };
@@ -19,6 +20,7 @@ type Props<T> = {
 const ArrayVisualizer = <T,>({
     items,
     highlightedIndices = [],
+    foundIndex,
     pointers = []
 }: Props<T>) => {
 
@@ -40,13 +42,14 @@ const ArrayVisualizer = <T,>({
                             relative
                             border border-orange-200
                             text-black
-                            w-16 h-16
+                            w-12 h-12
                             flex items-center justify-center
                             text-xl
-                            ${isHighlighted
-                                ? "bg-orange-200"
-                                : "bg-white"
-                            }
+                            ${foundIndex === idx
+                                ? "bg-green-200"
+                                : isHighlighted
+                                    ? "bg-orange-200"
+                                    : "bg-white"}
                         `}
                     >
 
@@ -97,7 +100,7 @@ const ArrayVisualizer = <T,>({
                 flex flex-col items-center
                 text-sm
                 font-semibold
-                ${pointer.color?? "text-black"}
+                ${pointer.color ?? "text-black"}
                 ${pointer.position === "bottom"
                                             ? "-bottom-8"
                                             : "-top-8"
