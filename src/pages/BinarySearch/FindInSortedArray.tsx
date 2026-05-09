@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 const FindInSortedArray = () => {
-    const nums = [2, 5, 9, 11, 20, 21, 25, 27, 55, 70];
-    const k = 11;
+    const nums = [2, 5, 9, 11, 20, 21, , 23, 25, 27, 33, 37, 39, 40, 48, 55, 70, 81, 82, 89, 90,];
+    const k = 38;
 
     const states: State[] = generateFindInSortedArrayStates(nums, k);
 
@@ -23,29 +23,29 @@ const FindInSortedArray = () => {
                     pointers={[
                         {
                             index: current.i,
-                            label: "i",
+                            label: "left",
                             position: 'bottom',
-                            color:"text-blue-500"
+                            color: "text-blue-500"
                         },
                         {
                             index: current.mid,
                             label: "mid",
                             position: 'top',
-                            color:"text-green-500"
+                            color: "text-green-500"
                         },
                         {
                             index: current.j,
-                            label: 'j',
+                            label: 'right',
                             position: 'bottom',
-                            color:"text-red-500"
+                            color: "text-red-500"
                         }
                     ]}
                 />
-                    <span className="h-16 text-xl w-16 flex justify-center items-center border-green-200 border">{k}</span> :To Find
+                <span className="h-16 text-xl w-16 flex justify-center items-center border-green-200 border">{k}</span> :Target
             </div>
 
             <div className="mt-10">
-                Found: <span className="text-orange-400">{current.found ? "true" : "false"}</span>
+                <span className="text-orange-400">{current.found ? "Mid == Target" : "Mid != Target"}</span>
             </div>
 
             <div className="flex justify-center gap-4 mt-10">
@@ -71,8 +71,6 @@ const FindInSortedArray = () => {
                     Next
                 </Button>
             </div>
-
-
         </div>
     )
 }

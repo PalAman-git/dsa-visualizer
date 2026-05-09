@@ -2,48 +2,56 @@ import './App.css'
 import { useState } from "react";
 
 import AlgorithmSelector
-from "@/components/controls/AlgorithmSelector";
+  from "@/components/controls/AlgorithmSelector";
 
 import { algorithms }
-from "./config/algorithms";
+  from "./config/algorithms";
+import BigOVisualizer from './components/complexity/BigOVisualizer';
 
 function App() {
 
-    const [selectedAlgorithm,
+  const [selectedAlgorithm,
     setSelectedAlgorithm] =
-        useState("sliding-window");
+    useState("sliding-window");
 
-    const currentAlgorithm =
-        algorithms
-            .flatMap(group => group.items)
-            .find(
-                item =>
-                    item.id === selectedAlgorithm
-            );
+  const currentAlgorithm =
+    algorithms
+      .flatMap(group => group.items)
+      .find(
+        item =>
+          item.id === selectedAlgorithm
+      );
 
-    return (
+  return (
 
-        <div className="p-10">
+    <div className='p-10'>
 
-            <AlgorithmSelector
+      <AlgorithmSelector
 
-                value={selectedAlgorithm}
+        value={selectedAlgorithm}
 
-                onChange={setSelectedAlgorithm}
+        onChange={setSelectedAlgorithm}
 
-                algorithms={algorithms}
+        algorithms={algorithms}
 
-            />
+      />
 
-            <div className="mt-10">
+      <div className="mt-10">
 
-                {currentAlgorithm?.component}
+        {currentAlgorithm?.component}
 
-            </div>
+      </div>
 
-        </div>
+      <div className='w-full'>
 
-    );
+      <div className='max-w-200 mx-auto mb-50'>
+        <BigOVisualizer/>
+      </div>
+      </div>
+
+    </div>
+
+  );
 }
 
 export default App;
