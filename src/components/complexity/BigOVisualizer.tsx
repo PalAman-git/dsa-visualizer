@@ -116,7 +116,7 @@ const zones = [
     label: "Good",
     sublabel: "O(log n)",
     fill: "#d1fae5", tc: "#065f46",
-    points: () => buildBand(n => Math.log2(n + 1), n => 1),
+    points: () => buildBand(n => Math.log2(n + 1), () => 1),
     lx: () => PL + CW * 0.55,
     ly: () => sy(Math.log2(N * 0.55 + 1)) - 10,
   },
@@ -133,7 +133,7 @@ const zones = [
     sublabel: "O(n log n) – O(n²)",
     fill: "#fed7aa", tc: "#9a3412",
     points: () => buildBand(n => n * n, n => n),
-    lx: () => PL + CW * 0.22,
+    lx: () => PL + CW * 0.49,
     ly: () => sy((N * 0.22 * N * 0.22 + N * 0.22) / 2) - 6,
   },
   {
