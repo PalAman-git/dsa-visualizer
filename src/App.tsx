@@ -7,49 +7,33 @@ import AlgorithmSelector
 import { algorithms }
   from "./config/algorithms";
 import BigOVisualizer from './components/complexity/BigOVisualizer';
+import { SidebarProvider, SidebarTrigger } from './components/ui/sidebar';
+import { AppSidebar } from './components/layout/AppSidebar';
+import FindInSortedArray from './pages/BinarySearch/FindInSortedArray';
 
 function App() {
 
-  const [selectedAlgorithm,
-    setSelectedAlgorithm] =
-    useState("sliding-window");
+  const [selectedComponent,
+    setSelectedComponent] =
+    useState<React.ReactNode>(<FindInSortedArray />);
 
-  const currentAlgorithm =
-    algorithms
-      .flatMap(group => group.items)
-      .find(
-        item =>
-          item.id === selectedAlgorithm
-      );
-
+  
   return (
 
-    <div className='p-10'>
+    <SidebarProvider>
+      <div className='flex h-screen w-full'>
 
-      <AlgorithmSelector
+      <AppSidebar setSelectedComponent={setSelectedComponent}/>
 
-        value={selectedAlgorithm}
-
-        onChange={setSelectedAlgorithm}
-
-        algorithms={algorithms}
-
-      />
-
-      <div className="mt-10">
-
-        {currentAlgorithm?.component}
-
+      <main className='flex-1 p-4 overflow-auto'>
+        <SidebarTrigger />
+        {selectedComponent}
+          <div className='max-w-200 mx-auto mt-20 mb-50'>
+            <BigOVisualizer />
+          </div>
+      </main>
       </div>
-
-      <div className='w-full'>
-
-      <div className='max-w-200 mx-auto mt-20 mb-50'>
-        <BigOVisualizer/>
-      </div>
-      </div>
-
-    </div>
+    </SidebarProvider>
 
   );
 }
