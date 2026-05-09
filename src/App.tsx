@@ -44,7 +44,7 @@ function App() {
 
       <div className='w-full'>
 
-      <div className='max-w-200 mx-auto mb-50'>
+      <div className='max-w-200 mx-auto mt-20 mb-50'>
         <BigOVisualizer/>
       </div>
       </div>

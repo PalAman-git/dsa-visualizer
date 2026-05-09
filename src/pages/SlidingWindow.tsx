@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { generateSlidingWindowStates } from "../algorithms/SlidingWindow"
-import ArrayVisualizer from "../components/dataStructure/ArrayVisualizer";
+import { generateSlidingWindowStates } from "@/algorithms/SlidingWindow"
+import ArrayVisualizer from "@/components/dataStructure/ArrayVisualizer";
 
 type State = {
     i: number;
