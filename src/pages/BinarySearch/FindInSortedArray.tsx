@@ -7,7 +7,7 @@ const FindInSortedArray = () => {
     const nums = [2, 5, 9, 11, 20, 21, 23, 25, 27, 33, 37, 39, 40, 48, 55, 70, 81, 82, 89, 90,];
     const k = 40;
 
-    const question = "Find a number in Sorted Array";
+    const question = "Q) Find a number in Sorted Array";
 
     const states: State[] = generateFindInSortedArrayStates(nums, k);
 
@@ -17,6 +17,9 @@ const FindInSortedArray = () => {
 
     return (
         <div className="p-10">
+            <div className="mb-20 text-3xl">
+                {question}
+            </div>
             <div className="flex justify-center items-center gap-4 mb-10">
 
                 <ArrayVisualizer
@@ -47,7 +50,7 @@ const FindInSortedArray = () => {
                 <span className="h-12 text-xl w-12 flex justify-center items-center border-green-200 border">{k}</span> :Target
             </div>
 
-                <ActionPanel step={step} statesLength={states.length} setStep={setStep} />
+            <ActionPanel step={step} statesLength={states.length} setStep={setStep} />
         </div>
     )
 }

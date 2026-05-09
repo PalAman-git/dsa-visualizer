@@ -1,11 +1,6 @@
 import './App.css'
 import { useState } from "react";
 
-import AlgorithmSelector
-  from "@/components/controls/AlgorithmSelector";
-
-import { algorithms }
-  from "./config/algorithms";
 import BigOVisualizer from './components/complexity/BigOVisualizer';
 import { SidebarProvider, SidebarTrigger } from './components/ui/sidebar';
 import { AppSidebar } from './components/layout/AppSidebar';
@@ -26,7 +21,6 @@ function App() {
       <AppSidebar setSelectedComponent={setSelectedComponent}/>
 
       <main className='flex-1 p-4 overflow-auto'>
-        <SidebarTrigger />
         {selectedComponent}
           <div className='max-w-200 mx-auto mt-20 mb-50'>
             <BigOVisualizer />

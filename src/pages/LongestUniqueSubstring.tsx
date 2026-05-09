@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ArrayVisualizer from "../components/dataStructure/ArrayVisualizer";
 import { generateLongestUniqueSubstringStates, type State } from "../algorithms/longestUniqueSubstring";
+import ActionPanel from "@/components/controls/ActionPanel";
 
 const LongestUniqueSubstring = () => {
     const s = "abcdcdabbbef";
@@ -10,22 +11,10 @@ const LongestUniqueSubstring = () => {
     const [step, setStep] = useState(0);
     const current = states[step];
 
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setStep(prev => {
-                if (prev < states.length - 1) {
-                    return prev + 1;
-                }
-
-                return prev;
-            });
-        }, 1500)
-
-        return () => clearInterval(timer);
-    }, [])
-
     return (
         <div className="p-10">
+            <ActionPanel className="mb-10" setStep={setStep} step={step} statesLength={states.length}/>
+
             <ArrayVisualizer
                 items={chars}
                 highlightedIndices={
@@ -38,12 +27,14 @@ const LongestUniqueSubstring = () => {
                     {
                         index: current.i,
                         label: "i",
-                        position: "bottom"
+                        position: "bottom",
+                        color:"text-blue-500"
                     },
                     {
                         index: current.j,
                         label: "j",
-                        position: "top"
+                        position: "top",
+                        color:"text-red-500"
                     }
                 ]}
             />
@@ -88,22 +79,7 @@ const LongestUniqueSubstring = () => {
                 </div>
 
             </div>
-            {
-                current.duplicate && (
-
-                    <div className="
-            mt-6
-            text-red-500
-            text-2xl
-        ">
-
-                        Duplicate Found:
-                        {current.duplicate}
-
-                    </div>
-
-                )
-            }
+            
         </div>
     )
 }

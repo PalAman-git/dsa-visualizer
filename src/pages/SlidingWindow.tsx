@@ -1,9 +1,6 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { generateSlidingWindowStates } from "@/algorithms/SlidingWindow"
 import ArrayVisualizer from "@/components/dataStructure/ArrayVisualizer";
-import NextButton from "@/components/controls/NextButton";
-import PlayButton from "@/components/controls/PlayButton";
-import PrevButton from "@/components/controls/PrevButton";
 import ActionPanel from "@/components/controls/ActionPanel";
 
 type State = {
