@@ -7,8 +7,8 @@ const CW = VW - PL - PR
 const CH = VH - PT - PB
 const N = 50, YMAX = 50, STEPS = 800
 
-const sx = n => PL + (n / N) * CW
-const sy = v => PT + CH - (Math.min(v, YMAX) / YMAX) * CH
+const sx = (n:number) => PL + (n / N) * CW
+const sy = (v: number) => PT + CH - (Math.min(v, YMAX) / YMAX) * CH
 
 // ─── Complexity functions ────────────────────────────────────────────────────
 const fns = [
@@ -16,48 +16,48 @@ const fns = [
     id: "c1", label: "O(1)", color: "#059669", dash: "",
     name: "Constant time",
     algos: ["Array index access a[i]", "Hash map get / set", "Stack push & pop", "Queue enqueue & dequeue", "Checking if a number is even"],
-    fn: n => 1,
+    fn: () => 1,
   },
   {
     id: "logn", label: "O(log n)", color: "#0ea5e9", dash: "6 3",
     name: "Logarithmic time",
     algos: ["Binary search", "Balanced BST lookup", "Heap insert & delete", "Finding power (fast exponentiation)", "Segment tree query"],
-    fn: n => Math.log2(n + 1),
+    fn: (n:number) => Math.log2(n + 1),
   },
   {
     id: "n", label: "O(n)", color: "#d97706", dash: "",
     name: "Linear time",
     algos: ["Linear search", "Array traversal", "Finding min / max", "Counting elements", "Two-pointer technique"],
-    fn: n => n,
+    fn: (n:number) => n,
   },
   {
     id: "nlogn", label: "O(n log n)", color: "#7c3aed", dash: "8 3",
     name: "Linearithmic time",
     algos: ["Merge sort", "Heap sort", "Quick sort (avg)", "FFT (Fast Fourier Transform)", "Tim sort (Python default)"],
-    fn: n => n * Math.log2(n + 1),
+    fn: (n:number) => n * Math.log2(n + 1),
   },
   {
     id: "n2", label: "O(n²)", color: "#dc2626", dash: "4 4",
     name: "Quadratic time",
     algos: ["Bubble sort", "Insertion sort", "Selection sort", "Comparing all pairs", "Naive matrix multiply"],
-    fn: n => n * n,
+    fn: (n:number) => n * n,
   },
   {
     id: "2n", label: "O(2ⁿ)", color: "#b91c1c", dash: "10 3 2 3",
     name: "Exponential time",
     algos: ["Recursive Fibonacci (naive)", "Generating all subsets", "0/1 Knapsack (brute force)", "Travelling salesman (brute)", "Recursive tower of Hanoi"],
-    fn: n => Math.pow(2, n),
+    fn: (n:number) => Math.pow(2, n),
   },
   {
     id: "nfact", label: "O(n!)", color: "#7f1d1d", dash: "3 3",
     name: "Factorial time",
     algos: ["Generating all permutations", "Brute-force TSP (all routes)", "Bogosort", "Solving n-queens (brute)", "Lexicographic ordering"],
-    fn: n => { let f = 1; for (let i = 2; i <= n; i++) f *= i; return f; },
+    fn: (n:number) => { let f = 1; for (let i = 2; i <= n; i++) f *= i; return f; },
   },
 ]
 
 // ─── Build SVG path string from a math function ──────────────────────────────
-function buildPath(fn, clip = true) {
+function buildPath(fn:(n:number) => number, clip = true) {
   let d = ""
   for (let i = 0; i <= STEPS; i++) {
     const n = (i / STEPS) * N
@@ -72,7 +72,7 @@ function buildPath(fn, clip = true) {
 
 // Build a filled polygon between two curves (upper and lower bounding fns)
 // upper curve drawn left→right, lower curve drawn right→left to close shape
-function buildBand(fnTop, fnBottom) {
+function buildBand(fnTop:(n:number) => number, fnBottom:(n:number) => number) {
   const pts = []
   // forward along top curve
   for (let i = 0; i <= STEPS; i++) {
@@ -146,7 +146,7 @@ const zones = [
   },
 ]
 
-function getTagPos(fn) {
+function getTagPos(fn:(n:number) => number) {
   for (let i = STEPS; i >= 1; i--) {
     const n = (i / STEPS) * N, v = fn(n)
     if (v <= YMAX * 0.97) return { tx: sx(n), ty: sy(v) }
@@ -156,12 +156,12 @@ function getTagPos(fn) {
 
 // ─── Component ───────────────────────────────────────────────────────────────
 const BigOVisualizer = () => {
-  const [hovered, setHovered] = useState(null)
-  const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, c: null })
-  const containerRef = useRef(null)
-  const svgRef = useRef(null)
+  const [hovered, setHovered] = useState<string|null>(null)
+  const [tooltip, setTooltip] = useState<{visible:boolean,x:number,y:number,c:(typeof fns)[number] | null}>({ visible: false, x: 0, y: 0, c: null })
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const svgRef = useRef<SVGSVGElement | null>(null)
 
-  const showTooltip = useCallback((c) => {
+  const showTooltip = useCallback((c:(typeof fns)[number]) => {
     if (!svgRef.current || !containerRef.current) return
     const svgRect = svgRef.current.getBoundingClientRect()
     const containerRect = containerRef.current.getBoundingClientRect()
@@ -176,7 +176,7 @@ const BigOVisualizer = () => {
   }, [])
 
   const hideTooltip = useCallback(() => setTooltip(t => ({ ...t, visible: false })), [])
-  const handleEnter = useCallback((c) => { setHovered(c.id); showTooltip(c) }, [showTooltip])
+  const handleEnter = useCallback((c:(typeof fns)[number]) => { setHovered(c.id); showTooltip(c) }, [showTooltip])
   const handleLeave = useCallback(() => { setHovered(null); hideTooltip() }, [hideTooltip])
 
   return (
@@ -346,7 +346,7 @@ const BigOVisualizer = () => {
               Common algorithms:
             </div>
             <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, color: "#374151", lineHeight: 1.9 }}>
-              {tooltip.c.algos.map(a => <li key={a}>{a}</li>)}
+              {tooltip.c.algos.map((a:string) => <li key={a}>{a}</li>)}
             </ul>
           </div>
         )}

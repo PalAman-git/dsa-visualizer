@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 const FindInSortedArray = () => {
-    const nums = [2, 5, 9, 11, 20, 21, , 23, 25, 27, 33, 37, 39, 40, 48, 55, 70, 81, 82, 89, 90,];
+    const nums = [2, 5, 9, 11, 20, 21, 23, 25, 27, 33, 37, 39, 40, 48, 55, 70, 81, 82, 89, 90,];
     const k = 38;
 
     const states: State[] = generateFindInSortedArrayStates(nums, k);
