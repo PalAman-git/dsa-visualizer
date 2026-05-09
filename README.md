@@ -117,6 +117,7 @@ npm run dev
 
 ## 🗺️ Planned Features
 
+- [x] Big O Visualizer for time complexities
 - [ ] Play / Pause / Step controls
 - [ ] Speed controls
 - [ ] Complexity visualization (Time & Space)
