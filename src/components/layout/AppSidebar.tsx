@@ -14,7 +14,11 @@ import { ScrollArea } from "../ui/scroll-area"
 
 type FileTreeItem = { name: string; component: React.ReactNode } | { name: string; items: FileTreeItem[] }
 
-export function AppSidebar({ setSelectedComponent }) {
+type Props = {
+    setSelectedComponent:React.Dispatch<React.SetStateAction<React.ReactNode>>;
+}
+
+export function AppSidebar({ setSelectedComponent }:Props) {
     const fileTree: FileTreeItem[] = [
         {
             name: "Binary Search",

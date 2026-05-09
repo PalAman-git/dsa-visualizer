@@ -2,7 +2,7 @@ import './App.css'
 import { useState } from "react";
 
 import BigOVisualizer from './components/complexity/BigOVisualizer';
-import { SidebarProvider, SidebarTrigger } from './components/ui/sidebar';
+import { SidebarProvider } from './components/ui/sidebar';
 import { AppSidebar } from './components/layout/AppSidebar';
 import FindInSortedArray from './pages/BinarySearch/FindInSortedArray';
 
