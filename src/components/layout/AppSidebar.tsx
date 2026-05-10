@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { ChevronRightIcon, FileIcon, FolderIcon, PanelLeftIcon, XIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { cn } from "@/lib/utils"
