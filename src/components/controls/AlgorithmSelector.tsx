@@ -39,7 +39,7 @@ const AlgorithmSelector = ({
             onValueChange={onChange}
         >
 
-            <SelectTrigger className="w-[400px]">
+            <SelectTrigger className="w-[400px] text-white">
 
                 <SelectValue
                     placeholder="Choose Algorithm"
