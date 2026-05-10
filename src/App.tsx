@@ -22,7 +22,7 @@ function App() {
 
       <main className='flex-1 overflow-auto'>
         {selectedComponent}
-          <div className='max-w-200 mx-auto mt-20 mb-50'>
+          <div className='max-w-200 mx-auto mb-50'>
             <BigOVisualizer />
           </div>
       </main>
