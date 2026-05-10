@@ -1,6 +1,3 @@
-import SlidingWindow
-from "@/pages/SlidingWindow";
-
 import LongestUniqueSubstring
 from "@/pages/LongestUniqueSubstring";
 
@@ -13,21 +10,9 @@ export const algorithms = [
 
         items: [
             {
-                id: "sliding-window",
-
-                label: "Fixed Window Sum",
-
-                component: <SlidingWindow />
-            },
-
-            {
-                id: "longest-unique",
-
-                label:
-                    "Longest Unique Substring",
-
-                component:
-                    <LongestUniqueSubstring />
+                id:"longest-unique",
+                label:"Longest Unique Substring",
+                component:<LongestUniqueSubstring />
             }
         ]
     },
