@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
+import { motion, LayoutGroup } from "framer-motion";
 import { ArrowUp, ArrowDown } from "lucide-react";
+import { useRef, useState, useEffect, useCallback } from "react";
 
 type Pointer = {
     index: number;
@@ -10,10 +11,8 @@ type Pointer = {
 
 type Props<T> = {
     items: T[];
-
     highlightedIndices?: number[];
     foundIndex?: number;
-
     pointers?: Pointer[];
 };
 
@@ -21,139 +20,179 @@ const ArrayVisualizer = <T,>({
     items,
     highlightedIndices = [],
     foundIndex,
-    pointers = []
+    pointers = [],
 }: Props<T>) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [cellOffsets, setCellOffsets] = useState<number[]>([]);
 
-    return (
+    const measureCells = useCallback(() => {
+        if (!containerRef.current) return;
+        const cells = containerRef.current.querySelectorAll<HTMLElement>("[data-cell]");
+        const containerLeft = containerRef.current.getBoundingClientRect().left;
+        const offsets = Array.from(cells).map(
+            (cell) =>
+                cell.getBoundingClientRect().left -
+                containerLeft +
+                cell.offsetWidth / 2
+        );
+        setCellOffsets(offsets);
+    }, []);
 
-        <div className="flex justify-center">
+    useEffect(() => { measureCells(); }, [items.length, measureCells]);
 
-            {items.map((item, idx) => {
+    useEffect(() => {
+        if (!containerRef.current) return;
+        const observer = new ResizeObserver(() => measureCells());
+        observer.observe(containerRef.current);
+        return () => observer.disconnect();
+    }, [measureCells]);
 
-                const isHighlighted =
-                    highlightedIndices.includes(idx);
+    const getPointerOffset = (pointer: Pointer): number => {
+        const siblings = pointers.filter(
+            (p) =>
+                p.index === pointer.index &&
+                (p.position ?? "top") === (pointer.position ?? "top")
+        );
+        if (siblings.length === 1) return 0;
+        const myIdx = siblings.findIndex((p) => p.label === pointer.label);
+        if (siblings.length === 2) return myIdx === 0 ? -10 : 10;
+        return ([-18, 0, 18] as number[])[myIdx] ?? 0;
+    };
+
+    const renderPointers = (position: "top" | "bottom") =>
+        pointers
+            .filter((p) => (p.position ?? "top") === position)
+            .map((pointer) => {
+                const estimatedCellWidth = containerRef.current
+                    ? containerRef.current.offsetWidth / items.length
+                    : 40;
+                const centerX =
+                    cellOffsets[pointer.index] ??
+                    pointer.index * estimatedCellWidth + estimatedCellWidth / 2;
+                const offset = getPointerOffset(pointer);
+
+                // Extract a raw CSS color from the Tailwind class if provided,
+                // else fall back to the theme accent
+                const colorMap: Record<string, string> = {
+                    "text-blue-500":   "#3b82f6",
+                    "text-purple-500": "var(--accent)",
+                    "text-red-500":    "#ef4444",
+                    "text-green-500":  "#22c55e",
+                };
+                const resolvedColor = pointer.color
+                    ? (colorMap[pointer.color] ?? pointer.color)
+                    : "var(--text-h)";
 
                 return (
-
                     <motion.div
-                        layout
-                        key={idx}
+                        key={pointer.label}
+                        layoutId={`pointer-${pointer.label}`}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         className={`
-                            relative
-                            border border-orange-200
-                            text-black
-                            w-12 h-12
-                            flex items-center justify-center
-                            text-xl
-                            ${foundIndex === idx
-                                ? "bg-green-200"
-                                : isHighlighted
-                                    ? "bg-orange-200"
-                                    : "bg-white"}
+                            absolute flex flex-col items-center
+                            text-[10px] sm:text-xs font-bold tracking-wider whitespace-nowrap
+                            ${position === "top" ? "bottom-0" : "top-0"}
                         `}
+                        style={{
+                            left: centerX + offset,
+                            transform: "translateX(-50%)",
+                            color: resolvedColor,
+                            fontFamily: "var(--mono)",
+                        }}
                     >
+                        {position === "top" ? (
+                            <>
+                                <span>{pointer.label}</span>
+                                <ArrowDown size={11} strokeWidth={2.5} />
+                            </>
+                        ) : (
+                            <>
+                                <ArrowUp size={11} strokeWidth={2.5} />
+                                <span>{pointer.label}</span>
+                            </>
+                        )}
+                    </motion.div>
+                );
+            });
 
-                        {String(item)}
+    return (
+        <LayoutGroup>
+            <div className="w-full" style={{ fontFamily: "var(--mono)" }}>
+                <div className="relative flex flex-col items-stretch">
 
-                        {pointers.map((pointer, pIdx) => {
+                    {/* Top pointer row */}
+                    <div className="relative h-7 sm:h-8">
+                        {renderPointers("top")}
+                    </div>
 
-                            if (pointer.index !== idx) {
-                                return null;
-                            }
+                    {/* Array cells */}
+                    <div ref={containerRef} className="flex" style={{ borderRadius: "4px", overflow: "hidden" }}>
+                        {items.map((item, idx) => {
+                            const isHighlighted = highlightedIndices.includes(idx);
+                            const isFound = foundIndex === idx;
 
-                            const sameIndexPointers =
-                                pointers.filter(
-                                    p => p.index === idx
-                                );
+                            let bg = "var(--bg)";
+                            let color = "var(--text)";
+                            let borderColor = "var(--border)";
 
-                            const currentPointerIndex =
-                                sameIndexPointers.findIndex(
-                                    p => p.label === pointer.label
-                                );
-
-                            let offset = 0;
-
-                            if (sameIndexPointers.length === 2) {
-
-                                offset =
-                                    currentPointerIndex === 0
-                                        ? -10
-                                        : 10;
-                            }
-
-                            else if (sameIndexPointers.length === 3) {
-
-                                const positions = [-18, 0, 18];
-
-                                offset =
-                                    positions[currentPointerIndex];
+                            if (isFound) {
+                                bg = "rgba(34,197,94,0.12)";
+                                color = "#16a34a";
+                                borderColor = "#22c55e";
+                            } else if (isHighlighted) {
+                                bg = "var(--accent-bg)";
+                                color = "var(--accent)";
+                                borderColor = "var(--accent-border)";
                             }
 
                             return (
-
-                                <div
-                                    key={pIdx}
-
-                                    className={`
-                absolute
-                left-1/2
-                flex flex-col items-center
-                text-sm
-                font-semibold
-                ${pointer.color ?? "text-black"}
-                ${pointer.position === "bottom"
-                                            ? "-bottom-8"
-                                            : "-top-8"
-                                        }
-            `}
-
+                                <motion.div
+                                    layout
+                                    key={idx}
+                                    data-cell
+                                    className="relative flex-1 min-w-0 flex items-center justify-center text-[11px] sm:text-sm font-medium transition-colors duration-150"
                                     style={{
-                                        transform:
-                                            `translateX(calc(-50% + ${offset}px))`
+                                        height: "2.5rem",
+                                        background: bg,
+                                        color,
+                                        borderTop: `1px solid ${borderColor}`,
+                                        borderBottom: `1px solid ${borderColor}`,
+                                        borderRight: `1px solid ${borderColor}`,
+                                        borderLeft: idx === 0 ? `1px solid ${borderColor}` : "none",
                                     }}
                                 >
-
-                                    {
-                                        pointer.position === "bottom"
-                                            ? (
-                                                <>
-                                                    <ArrowUp
-                                                        size={14}
-                                                        strokeWidth={2.5}
-                                                    />
-
-                                                    <span>
-                                                        {pointer.label}
-                                                    </span>
-                                                </>
-                                            )
-                                            : (
-                                                <>
-                                                    <span>
-                                                        {pointer.label}
-                                                    </span>
-
-                                                    <ArrowDown
-                                                        size={14}
-                                                        strokeWidth={2.5}
-                                                    />
-                                                </>
-                                            )
-                                    }
-
-                                </div>
-
+                                    {String(item)}
+                                </motion.div>
                             );
-
                         })}
+                    </div>
 
-                    </motion.div>
+                    {/* Index row */}
+                    <div className="flex">
+                        {items.map((_, idx) => (
+                            <div
+                                key={idx}
+                                className="flex-1 min-w-0 flex items-center justify-center pt-1"
+                                style={{
+                                    fontSize: "9px",
+                                    color: "var(--text)",
+                                    fontFamily: "var(--mono)",
+                                    opacity: 0.5,
+                                }}
+                            >
+                                {idx}
+                            </div>
+                        ))}
+                    </div>
 
-                );
-            })}
+                    {/* Bottom pointer row */}
+                    <div className="relative h-7 sm:h-8">
+                        {renderPointers("bottom")}
+                    </div>
 
-        </div>
-
+                </div>
+            </div>
+        </LayoutGroup>
     );
 };
 

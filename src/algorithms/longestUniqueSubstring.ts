@@ -17,6 +17,15 @@ export function generateLongestUniqueSubstringStates(s:string) :State[]{
     const set = new Set<string>();
 
     for(let j=0;j<s.length;j++){
+        //push the initial step
+        states.push({
+            i,
+            j,
+            currentWindow:s.slice(i,j),
+            seen:[...set],
+            maxLen
+        })
+
         while(set.has(s[j])){
 
             states.push({

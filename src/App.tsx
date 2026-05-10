@@ -16,11 +16,11 @@ function App() {
   return (
 
     <SidebarProvider>
-      <div className='flex h-screen w-full'>
+      <div className='flex h-screen w-full' style={{background:"var(--bg)"}}>
 
       <AppSidebar setSelectedComponent={setSelectedComponent}/>
 
-      <main className='flex-1 p-4 overflow-auto'>
+      <main className='flex-1 overflow-auto'>
         {selectedComponent}
           <div className='max-w-200 mx-auto mt-20 mb-50'>
             <BigOVisualizer />
