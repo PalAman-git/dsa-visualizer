@@ -1,35 +1,39 @@
 import './App.css'
-import { useState } from "react";
+import { useMemo, useState } from 'react'
 
-import BigOVisualizer from './components/complexity/BigOVisualizer';
-import { SidebarProvider } from './components/ui/sidebar';
-import { AppSidebar } from './components/layout/AppSidebar';
-import FindInSortedArray from './pages/BinarySearch/FindInSortedArray';
+import BigOVisualizer from './components/complexity/BigOVisualizer'
+import AlgorithmSelector from './components/controls/AlgorithmSelector'
+import { algorithms } from './config/algorithms'
 
 function App() {
+  const defaultAlgorithmId = algorithms[0]?.items[0]?.id ?? ''
+  const [selectedAlgorithmId, setSelectedAlgorithmId] = useState(defaultAlgorithmId)
 
-  const [selectedComponent,
-    setSelectedComponent] =
-    useState<React.ReactNode>(<FindInSortedArray />);
+  const selectedComponent = useMemo(() => {
+    const allItems = algorithms.flatMap((group) => group.items)
+    return allItems.find((item) => item.id === selectedAlgorithmId)?.component ?? null
+  }, [selectedAlgorithmId])
 
-  
   return (
+    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8">
+        <div className="flex items-center justify-center">
+          <AlgorithmSelector
+            value={selectedAlgorithmId}
+            onChange={setSelectedAlgorithmId}
+            algorithms={algorithms}
+          />
+        </div>
 
-    <SidebarProvider>
-      <div className='flex h-screen w-full' style={{background:"var(--bg)"}}>
-
-      <AppSidebar setSelectedComponent={setSelectedComponent}/>
-
-      <main className='flex-1 overflow-auto'>
-        {selectedComponent}
-          <div className='max-w-200 mx-auto mt-20 mb-50'>
+        <main className="space-y-10">
+          {selectedComponent}
+          <div className="mx-auto mt-20 mb-20 max-w-200">
             <BigOVisualizer />
           </div>
-      </main>
+        </main>
       </div>
-    </SidebarProvider>
-
-  );
+    </div>
+  )
 }
 
-export default App;
+export default App
